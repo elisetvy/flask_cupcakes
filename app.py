@@ -43,12 +43,12 @@ def get_cupcake(cupcake_id):
 
 @app.post('/api/cupcakes')
 def create_cupcake():
-    """Create new cupcake"""
+    """Create new cupcake""" #TODO:sample of how the data will look on return
 
     flavor = request.json["flavor"]
     size = request.json["size"]
     rating = request.json["rating"]
-    image_url = request.json["image_url"] or None
+    image_url = request.json["image_url"] or None #TODO:get or none
 
     new_cupcake = Cupcake(flavor=flavor,
                           size=size,
@@ -60,5 +60,5 @@ def create_cupcake():
 
     serialized = new_cupcake.serialize()
 
-    return jsonify(cupcake=serialized)
+    return jsonify(cupcake=serialized), 201
 
