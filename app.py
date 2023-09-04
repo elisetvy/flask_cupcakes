@@ -23,6 +23,12 @@ connect_db(app)
 
 # toolbar = DebugToolbarExtension(app)
 
+@app.get('/')
+def show_homepage():
+    """Show homepage."""
+
+    return render_template("homepage.html")
+
 @app.get('/api/cupcakes')
 def get_all_cupcakes():
     """Get data about all cupcakes."""
@@ -71,19 +77,16 @@ def update_cupcake(cupcake_id):
     Returns JSON {cupcake: {id, flavor, size, rating, image_url}}"""
 
     cupcake = Cupcake.query.get_or_404(cupcake_id)
-    #TODO: create variable data for request.json
-    data = request.json
 
     cupcake.flavor = request.json.get("flavor", cupcake.flavor)
     cupcake.size = request.json.get("size", cupcake.size)
     cupcake.rating = request.json.get("rating", cupcake.rating)
-    #TODO: if statement for default image
     cupcake.image_url = request.json.get("image_url", cupcake.image_url)
 
     db.session.commit()
 
     serialized = cupcake.serialize()
-    #TODO: get rid of middle variable
+
     return jsonify(cupcake=serialized)
 
 @app.delete('/api/cupcakes/<int:cupcake_id>')

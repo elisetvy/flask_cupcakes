@@ -117,17 +117,17 @@ class CupcakeViewsTestCase(TestCase):
 
         with app.test_client() as client:
             url = f"/api/cupcakes/{self.cupcake_id}"
-            resp = client.patch(url, json={"flavor": "matcha"})#TODO: Check to make sure the entire cupcake is updated
+            resp = client.patch(url, json=CUPCAKE_DATA_2)
 
             self.assertEqual(resp.status_code, 200)
 
             self.assertEqual(resp.json, {
                 "cupcake": {
                     "id": self.cupcake_id,
-                    "flavor": "matcha",
-                    "size": "TestSize",
-                    "rating": 5,
-                    "image_url": "http://test.com/cupcake.jpg"
+                    "flavor": "TestFlavor2",
+                    "size": "TestSize2",
+                    "rating": 10,
+                    "image_url": "http://test.com/cupcake2.jpg"
                 }
             })
 
@@ -137,8 +137,17 @@ class CupcakeViewsTestCase(TestCase):
         with app.test_client() as client:
             url = f"/api/cupcakes/{self.cupcake_id}"
             resp = client.delete(url)
-#TODO: test for 404
+
             self.assertEqual(resp.status_code, 200)
             data = resp.json
             self.assertEqual(data, {"deleted": self.cupcake_id})
             self.assertEqual(Cupcake.query.count(), 0)
+
+    def test_delete_nonexistent_cupcake(self):
+        """Test for deleting nonexistent cupcake"""
+
+        with app.test_client() as client:
+            url = "/api/cupcakes/999"
+            resp = client.delete(url)
+
+            self.assertEqual(resp.status_code, 404)

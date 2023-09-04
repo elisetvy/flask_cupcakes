@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cupcakes</title>
+</head>
+<body>
+<h3>Add a cupcake</h3>
+<form method="post" action="/api/cupcakes">
+  <label for="flavor">Flavor</label>
+  <input name="flavor" type="text">
+  <label for="size">Size</label>
+  <input name="size" type="text">
+  <label for="rating">Rating</label>
+  <input name="rating" type="number">
+  <label for="image_url">Image URL</label>
+  <input name="image_url" type="text">
+  <button>Submit</button>
+</form>
+
+<h3>Our cupcakes:</h3>
+<ul id="cupcake-list">
+
+</ul>
+<script src="script.js"></script>
+</body>
+</html>
