@@ -43,12 +43,14 @@ def get_cupcake(cupcake_id):
 
 @app.post('/api/cupcakes')
 def create_cupcake():
-    """Create new cupcake""" #TODO:sample of how the data will look on return
+    """Create new cupcake.
+
+    Returns JSON {cupcake: {id, flavor, size, rating, image_url}}"""
 
     flavor = request.json["flavor"]
     size = request.json["size"]
     rating = request.json["rating"]
-    image_url = request.json["image_url"] or None #TODO:get or none
+    image_url = request.json.get("image_url", None)
 
     new_cupcake = Cupcake(flavor=flavor,
                           size=size,
@@ -62,3 +64,21 @@ def create_cupcake():
 
     return jsonify(cupcake=serialized), 201
 
+@app.patch('/api/cupcakes/<int:cupcake_id>')
+def update_cupcake(cupcake_id):
+    """Updates a cupcake.
+
+    Returns JSON {cupcake: {id, flavor, size, rating, image_url}}"""
+
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+
+    cupcake.flavor = request.json.get("flavor", cupcake.flavor)
+    cupcake.size = request.json.get("size", cupcake.size)
+    cupcake.rating = request.json.get("rating", cupcake.rating)
+    cupcake.image_url = request.json.get("image_url", cupcake.image_url)
+
+    db.session.commit()
+
+    serialized = cupcake.serialize()
+
+    return jsonify(cupcake=serialized)
