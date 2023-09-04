@@ -71,14 +71,30 @@ def update_cupcake(cupcake_id):
     Returns JSON {cupcake: {id, flavor, size, rating, image_url}}"""
 
     cupcake = Cupcake.query.get_or_404(cupcake_id)
+    #TODO: create variable data for request.json
+    data = request.json
 
     cupcake.flavor = request.json.get("flavor", cupcake.flavor)
     cupcake.size = request.json.get("size", cupcake.size)
     cupcake.rating = request.json.get("rating", cupcake.rating)
+    #TODO: if statement for default image
     cupcake.image_url = request.json.get("image_url", cupcake.image_url)
 
     db.session.commit()
 
     serialized = cupcake.serialize()
-
+    #TODO: get rid of middle variable
     return jsonify(cupcake=serialized)
+
+@app.delete('/api/cupcakes/<int:cupcake_id>')
+def delete_cupcake(cupcake_id):
+    """ Delete a cupcake
+
+    Returns JSON {deleted: [cupcake-id]}"""
+
+    cupcake = Cupcake.query.get_or_404(cupcake_id)
+
+    db.session.delete(cupcake)
+    db.session.commit()
+
+    return jsonify(deleted=cupcake_id)
